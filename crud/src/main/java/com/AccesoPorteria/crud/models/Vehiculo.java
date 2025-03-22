@@ -1,7 +1,6 @@
 package com.AccesoPorteria.crud.models;
 import jakarta.persistence.*;
 import lombok.Data;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "vehiculos")
