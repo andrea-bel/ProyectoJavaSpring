@@ -10,29 +10,32 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/usuarios") //URL base para este controlador
 @CrossOrigin("*")
 public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
 
+    //Para registrar un nuevo usuario
     @PostMapping
     public Usuario crearUsuario(@RequestBody Usuario usuario) {
         return usuarioService.guardarUsuario(usuario);
     }
-
+    
     @GetMapping
     public List<Usuario> obtenerUsuarios() {
         return usuarioService.listarUsuarios();
     }
 
+    //Obtiene usuario por su ID
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable Long id) {
         Optional<Usuario> usuario = usuarioService.buscarUsuarioPorId(id);
         return usuario.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    //Actualiza usuario por su ID
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioActualizado) {
         if (!usuarioService.buscarUsuarioPorId(id).isPresent()) {
@@ -42,6 +45,7 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.guardarUsuario(usuarioActualizado));
     }
 
+    //Elimina usuario por su ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
         usuarioService.eliminarUsuario(id);

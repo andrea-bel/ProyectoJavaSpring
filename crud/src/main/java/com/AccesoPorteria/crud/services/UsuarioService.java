@@ -13,19 +13,19 @@ public class UsuarioService {
 
     @Autowired
     private IUsuarioRepository usuarioRepository;
-
+    //Para guardar nuevo usuario
     public Usuario guardarUsuario(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
-
+    //Para desplegar lista de usuarios
     public List<Usuario> listarUsuarios() {
         return usuarioRepository.findAll();
     }
-
+    //Para buscar usuario por ID
     public Optional<Usuario> buscarUsuarioPorId(Long id) {
         return usuarioRepository.findById(id);
     }
-
+    //Para eliminar un usuario
     public void eliminarUsuario(Long id) {
         usuarioRepository.deleteById(id);
     }

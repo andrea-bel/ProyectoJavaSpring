@@ -10,6 +10,7 @@ public class RegistroEntrada {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    //El registro queda con la fecha y la hora y un comentario opcional
     private LocalDateTime fechaHora;
     private String observaciones;
 }

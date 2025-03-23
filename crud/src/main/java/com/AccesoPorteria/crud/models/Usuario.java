@@ -15,7 +15,9 @@ public class Usuario extends Persona {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    //El rol puede ser Admin o Guarda
     private String rol;
+    //Estado es activo o inactivo
     private String estado;
     private String contrasena;
 }
