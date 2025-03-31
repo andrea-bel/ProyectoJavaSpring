@@ -2,54 +2,36 @@ package com.AccesoPorteria.crud.controller;
 
 import com.AccesoPorteria.crud.models.Usuario;
 import com.AccesoPorteria.crud.services.UsuarioService;
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/usuarios") //URL base para este controlador
-@CrossOrigin("*")
+@RequestMapping
 public class UsuarioController {
 
+    private final UsuarioService usuarioService;
+
     @Autowired
-    private UsuarioService usuarioService;
-
-    //Para registrar un nuevo usuario
-    @PostMapping
-    public Usuario crearUsuario(@RequestBody Usuario usuario) {
-        return usuarioService.guardarUsuario(usuario);
-    }
-    
-    @GetMapping
-    public List<Usuario> obtenerUsuarios() {
-        return usuarioService.listarUsuarios();
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
     }
 
-    //Obtiene usuario por su ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable Long id) {
-        Optional<Usuario> usuario = usuarioService.buscarUsuarioPorId(id);
-        return usuario.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    //Actualiza usuario por su ID
-    @PutMapping("/{id}")
-    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioActualizado) {
-        if (!usuarioService.buscarUsuarioPorId(id).isPresent()) {
-            return ResponseEntity.notFound().build();
+    @PostMapping("/usuarios")
+    public ResponseEntity<?> crearUsuario(@Valid @RequestBody Usuario usuario, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errores = new HashMap<>();
+            result.getFieldErrors().forEach(error -> errores.put(error.getField(), error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errores);
         }
-        usuarioActualizado.setId(id);
-        return ResponseEntity.ok(usuarioService.guardarUsuario(usuarioActualizado));
-    }
 
-    //Elimina usuario por su ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
-        usuarioService.eliminarUsuario(id);
-        return ResponseEntity.noContent().build();
+        Usuario nuevoUsuario = usuarioService.save(usuario);
+        return ResponseEntity.status(201).body(nuevoUsuario);
     }
 }
-

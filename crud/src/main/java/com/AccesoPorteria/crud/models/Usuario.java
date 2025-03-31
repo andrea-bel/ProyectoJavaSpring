@@ -1,23 +1,32 @@
 package com.AccesoPorteria.crud.models;
+
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@Data
 @Entity
-@Table(name = "usuarios")
-public class Usuario extends Persona {
+public class Usuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    //El rol puede ser Admin o Guarda
+
+    @NotBlank(message = "El rol no puede estar vacío")
+    @Pattern(regexp = "^(guarda|admin)$", message = "El rol debe ser 'guarda' o 'admin'")
     private String rol;
-    //Estado es activo o inactivo
-    private String estado;
-    private String contrasena;
+
+    @NotBlank(message = "La contraseña no puede estar vacía")
+    @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
+    @Pattern(
+        regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$",
+        message = "La contraseña debe contener al menos una mayúscula, un número y un carácter especial"
+    )
+    private String contraseña;
 }

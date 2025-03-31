@@ -1,5 +1,8 @@
 package com.AccesoPorteria.crud.models;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import java.time.LocalDateTime;
 
@@ -11,6 +14,11 @@ public class RegistroEntrada {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     //El registro queda con la fecha y la hora y un comentario opcional
+    @NotNull(message = "La fecha y hora no pueden estar vacías")
+    @PastOrPresent(message = "La fecha y hora no pueden ser futuras")
     private LocalDateTime fechaHora;
+
+    @Size(max = 255, message = "Las observaciones no pueden exceder 255 caracteres")
     private String observaciones;
+
 }
