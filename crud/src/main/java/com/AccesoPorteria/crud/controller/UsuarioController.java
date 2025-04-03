@@ -13,7 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api")
+@CrossOrigin("*")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -25,13 +26,28 @@ public class UsuarioController {
 
     @PostMapping("/usuarios")
     public ResponseEntity<?> crearUsuario(@Valid @RequestBody Usuario usuario, BindingResult result) {
+        // Debug logging
+        System.out.println("Received JSON data: " + usuario);
+        System.out.println("Email received: " + usuario.getCorreo());
+        System.out.println("Password received: " + (usuario.getContraseña() != null ? "not null" : "null"));
+
         if (result.hasErrors()) {
             Map<String, String> errores = new HashMap<>();
-            result.getFieldErrors().forEach(error -> errores.put(error.getField(), error.getDefaultMessage()));
+            result.getFieldErrors().forEach(error -> {
+                System.out.println("Validation error - Field: " + error.getField() 
+                    + ", Message: " + error.getDefaultMessage());
+                errores.put(error.getField(), error.getDefaultMessage());
+            });
             return ResponseEntity.badRequest().body(errores);
         }
 
-        Usuario nuevoUsuario = usuarioService.save(usuario);
-        return ResponseEntity.status(201).body(nuevoUsuario);
+        try {
+            Usuario nuevoUsuario = usuarioService.save(usuario);
+            return ResponseEntity.status(201).body(nuevoUsuario);
+        } catch (Exception e) {
+            System.out.println("Error saving user: " + e.getMessage());
+            return ResponseEntity.status(500)
+                .body(Map.of("error", "Error creating user: " + e.getMessage()));
+        }
     }
 }

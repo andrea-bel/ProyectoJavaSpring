@@ -2,6 +2,7 @@ package com.AccesoPorteria.crud.services;
 
 import com.AccesoPorteria.crud.models.Persona;
 import com.AccesoPorteria.crud.repositories.IPersonaRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ public class PersonaService {
     @Autowired
     private IPersonaRepository personaRepository;
 
-    public Persona guardarPersona(Persona persona) {
+    public Persona save(Persona persona) {
         return personaRepository.save(persona);
     }
 
@@ -29,5 +30,7 @@ public class PersonaService {
     public void eliminarPersona(Long id) {
         personaRepository.deleteById(id);
     }
+
+    
 }
 

@@ -3,15 +3,12 @@ package com.AccesoPorteria.crud.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 //Getters y setters generados por Lombok
-@Getter
-@Setter
+
 @Entity
 @Data
 @Table(name = "personas")//Define el nombre de la tabla en la BD
